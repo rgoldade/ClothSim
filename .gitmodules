@@ -1,0 +1,6 @@
+[submodule "External/autodiff"]
+	path = External/autodiff
+	url = https://github.com/autodiff/autodiff.git
+[submodule "External/googletest"]
+	path = External/googletest
+	url = https://github.com/google/googletest.git
