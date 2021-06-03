@@ -18,7 +18,7 @@ static std::unique_ptr<ExplicitFEMSolver> gSolver;
 
 static constexpr double gDt = .001;
 
-static constexpr double gDensity = .1;
+static constexpr double gDensity = .01;
 static constexpr double gStretchStiffness = 1.;
 static constexpr double gShearStiffness = 1.;
 
@@ -85,7 +85,7 @@ int main(int argc, char** argv)
     std::vector<int> fixed_vertices;
     for (int vertIndex = 0; vertIndex < mesh.vertexCount(); ++vertIndex)
     {
-        if (mesh.vertex(vertIndex)[1] > .99)
+        if (mesh.vertex(vertIndex)[1] > .99 && (mesh.vertex(vertIndex)[0] > .99 || mesh.vertex(vertIndex)[0] < -.99))
             fixed_vertices.push_back(vertIndex);
     }
 
