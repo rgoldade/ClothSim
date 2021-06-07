@@ -17,6 +17,7 @@ static std::unique_ptr<FEMClothMesh> gMesh;
 static std::unique_ptr<ExplicitFEMSolver> gSolver;
 
 static constexpr double gDt = .001;
+static constexpr double gDrawDt = 1. / 30.;
 
 static constexpr double gDensity = .01;
 static constexpr double gStretchStiffness = 1.;
@@ -26,10 +27,12 @@ static bool isDisplayDirty = true;
 static bool runSimulation = false;
 static bool runSingleFrame = false;
 
+static double gAccumDt = 0;
+
 void keyboard(unsigned char key, int x, int y)
 {
     if (key == ' ')
-        runSimulation = true;
+        runSimulation = !runSimulation;
     else if (key == 'n')
         runSingleFrame = true;
 
@@ -41,7 +44,13 @@ void display()
     if (runSimulation || runSingleFrame)
     {
         gSolver->solveTimestep(gDt);
-        isDisplayDirty = true;
+        gAccumDt += gDt;
+
+        if (gAccumDt >= gDrawDt)
+        {
+            gAccumDt = 0;
+            isDisplayDirty = true;
+        }
         runSingleFrame = false;
     }
 
@@ -54,6 +63,8 @@ void display()
                         true /* render edges */, Vec3d::Zero(), 5.,
                         true /* render vertices */, Vec3d(1, 0, 0));
         glutPostRedisplay();
+
+        isDisplayDirty = false;
     }
 }
 
@@ -64,7 +75,7 @@ int main(int argc, char** argv)
     Vec3d topRightCorner = center + scale;
     Vec3d bottomLeftCorner = center - scale;
 
-    gRenderer = std::make_unique<Renderer>("PBD cloth sim", Vec2i(1000, 1000), Vec2d(bottomLeftCorner[0], bottomLeftCorner[1]),
+    gRenderer = std::make_unique<Renderer>("FEM cloth sim", Vec2i(1000, 1000), Vec2d(bottomLeftCorner[0], bottomLeftCorner[1]),
                                    topRightCorner[1] - bottomLeftCorner[1], &argc, argv);
 
     gCamera = std::make_unique<Camera3D>(.5 * (topRightCorner + bottomLeftCorner), 2., 0., 0.);

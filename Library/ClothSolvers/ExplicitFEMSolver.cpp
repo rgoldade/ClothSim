@@ -104,7 +104,7 @@ void ExplicitFEMSolver::computeAcceleration()
 
 void ExplicitFEMSolver::solveTimestep(double dt)
 {
-	// Get half-step
+	// Step mesh forward using the previous timesteps's velocity and acceleration
 	tbb::parallel_for(tbb::blocked_range<int>(0, myMesh.vertexCount()), [&](const tbb::blocked_range<int>& range)
 	{
 		for (int vertIndex = range.begin(); vertIndex != range.end(); ++vertIndex)
