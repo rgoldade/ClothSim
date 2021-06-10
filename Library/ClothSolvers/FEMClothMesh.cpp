@@ -73,11 +73,11 @@ Vec6t<Scalar> computeF(const Vec6t<Scalar>& D, const Vec4t<Scalar>& Dinv)
 	Dmat.block(0, 0, 3, 1) = D.block(0, 0, 3, 1);
 	Dmat.block(0, 1, 3, 1) = D.block(3, 0, 3, 1);
 
-	Mat2x2t<Scalar> Dinv;
-	Dinv.block(0, 0, 2, 1) = Dinv.block(0, 0, 2, 1);
-	Dinv.block(0, 1, 2, 1) = Dinv.block(2, 0, 2, 1);
+	Mat2x2t<Scalar> DinvMat;
+	DinvMat.block(0, 0, 2, 1) = Dinv.block(0, 0, 2, 1);
+	DinvMat.block(0, 1, 2, 1) = Dinv.block(2, 0, 2, 1);
 
-	Mat3x2t<Scalar> Fmat = Dmat * Dinv;
+	Mat3x2t<Scalar> Fmat = Dmat * DinvMat;
 
 	Vec6t<Scalar> Fvec;
 	Fvec.block(0, 0, 3, 1) = Fmat.block(0, 0, 3, 1);
